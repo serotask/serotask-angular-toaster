@@ -1,0 +1,61 @@
+<div
+  [class]="rootClass()"
+  [attr.role]="isAlert() ? 'alert' : 'status'"
+  [attr.data-position]="item().position"
+  [style.--st-toaster-duration]="item().duration + 'ms'"
+  (mouseenter)="hold()"
+  (mouseleave)="release()"
+  (focusin)="hold()"
+  (focusout)="release()"
+>
+  @if (item().showIcon) {
+    <div class="st-toaster-item__icon" [class.st-toaster-item__icon--custom]="!!item().icon" aria-hidden="true">
+      @if (item().icon) {
+        <img [src]="item().icon" alt="" width="24" height="24" />
+      } @else {
+        @switch (item().type) {
+          @case ('success') {
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7.5" />
+            </svg>
+          }
+          @case ('error') {
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 7l10 10M17 7L7 17" />
+            </svg>
+          }
+          @case ('warning') {
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 6.5v7M12 17.5v.01" />
+            </svg>
+          }
+          @default {
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 11v6M12 7.5v.01" />
+            </svg>
+          }
+        }
+      }
+    </div>
+  }
+
+  <div class="st-toaster-item__content">
+    @if (item().title) {
+      <div class="st-toaster-item__title">{{ item().title }}</div>
+    }
+
+    <div class="st-toaster-item__message">{{ item().message }}</div>
+
+    @if (item().action) {
+      <button type="button" class="st-toaster-item__action" (click)="runAction()">{{ item().action }}</button>
+    }
+  </div>
+
+  @if (item().showClose) {
+    <button type="button" class="st-toaster-item__close" aria-label="Close notification" (click)="close()">&times;</button>
+  }
+
+  @if (showProgress()) {
+    <div class="st-toaster-item__progress" [class.st-toaster-item__progress--paused]="paused()" aria-hidden="true"></div>
+  }
+</div>

@@ -1,0 +1,9 @@
+<div [class]="rootClass()" [attr.dir]="settings().rtl ? 'rtl' : null" role="region" aria-label="Notifications">
+  @for (group of groups(); track group.position) {
+    <div [class]="'st-toaster__stack st-toaster__stack--' + group.position">
+      @for (item of group.items; track item.id) {
+        <st-toaster-item [item]="item" (dismissed)="remove($event)" />
+      }
+    </div>
+  }
+</div>

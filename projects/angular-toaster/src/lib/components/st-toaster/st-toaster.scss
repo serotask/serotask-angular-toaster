@@ -1,0 +1,114 @@
+/*
+  Public CSS variables (set them on `st-toaster` or any parent):
+    --st-toaster-surface, --st-toaster-text, --st-toaster-muted,
+    --st-toaster-success, --st-toaster-error, --st-toaster-warning, --st-toaster-info,
+    --st-toaster-width, --st-toaster-z-index
+*/
+
+:host {
+  position: fixed;
+  inset: 0;
+
+  z-index: var(--st-toaster-z-index, 10000);
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+.st-toaster {
+  --_surface: var(--st-toaster-surface, #ffffff);
+  --_text: var(--st-toaster-text, #1f2937);
+  --_muted: var(--st-toaster-muted, #4b5563);
+  --_shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.st-toaster--dark {
+  --_surface: var(--st-toaster-surface, #1f2937);
+  --_text: var(--st-toaster-text, #f9fafb);
+  --_muted: var(--st-toaster-muted, #d1d5db);
+  --_shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .st-toaster--auto {
+    --_surface: var(--st-toaster-surface, #1f2937);
+    --_text: var(--st-toaster-text, #f9fafb);
+    --_muted: var(--st-toaster-muted, #d1d5db);
+    --_shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* =========================================================
+   STACKS (one per screen position)
+========================================================= */
+
+.st-toaster__stack {
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  max-width: calc(100vw - 32px);
+
+  pointer-events: none;
+
+  &--top-left {
+    top: 24px;
+    left: 24px;
+  }
+
+  &--top-center {
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--top-right {
+    top: 24px;
+    right: 24px;
+  }
+
+  &--bottom-left {
+    bottom: 24px;
+    left: 24px;
+  }
+
+  &--bottom-center {
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--bottom-right {
+    bottom: 24px;
+    right: 24px;
+  }
+}
+
+/* Phones: every stack spans the screen width. */
+@media (max-width: 600px) {
+  .st-toaster__stack {
+    left: 16px;
+    right: 16px;
+
+    max-width: none;
+
+    transform: none;
+
+    &--top-left,
+    &--top-center,
+    &--top-right {
+      top: 16px;
+    }
+
+    &--bottom-left,
+    &--bottom-center,
+    &--bottom-right {
+      bottom: 16px;
+    }
+  }
+}

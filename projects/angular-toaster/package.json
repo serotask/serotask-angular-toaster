@@ -1,0 +1,29 @@
+{
+  "name": "@serotask/angular-toaster",
+  "version": "1.0.0",
+  "description": "Modern toast notifications for Angular: 4 types, 6 positions, queue, hover-to-pause, themes, animations, actions. Standalone, Signals, accessible and SSR-safe.",
+  "keywords": [
+    "angular",
+    "angular-toaster",
+    "toaster",
+    "toast",
+    "notification",
+    "snackbar",
+    "signals",
+    "standalone",
+    "serotask"
+  ],
+  "author": "serotask",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^20.0.0 || ^21.0.0 || ^22.0.0 || ^23.0.0",
+    "@angular/core": "^20.0.0 || ^21.0.0 || ^22.0.0 || ^23.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}

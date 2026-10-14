@@ -1,0 +1,269 @@
+<st-toaster />
+
+<main class="page" [class.dark]="toaster.settings().theme === 'dark'">
+  <header class="page-header">
+    <p class="eyebrow">SEROTASK DEVELOPER TOOLS</p>
+
+    <h1>@serotask/angular-toaster</h1>
+
+    <p class="subtitle">
+      A customizable Angular toast notification library with animations,
+      themes, queue management and flexible configuration.
+    </p>
+
+    <div class="status-bar">
+      <span>
+        Active toasts:
+        <strong>{{ toaster.items().length }}</strong>
+      </span>
+
+      <span>
+        Theme:
+        <strong>{{ toaster.settings().theme }}</strong>
+      </span>
+
+      <span>
+        Animation:
+        <strong>{{ toaster.settings().animation }}</strong>
+      </span>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="section-heading">
+      <span class="section-number">01</span>
+
+      <div>
+        <h2>Show a toast</h2>
+        <p>
+          Preview different notification types and test toast behavior.
+        </p>
+      </div>
+    </div>
+
+    <div class="toast-types">
+      @for (t of types; track t) {
+      <button type="button" class="type-button" [class]="'type-button type-button--' + t" (click)="fire(t)">
+        <span class="type-dot"></span>
+        {{ t }}
+      </button>
+      }
+    </div>
+
+    <div class="row">
+      <button type="button" class="primary" (click)="withAction()">
+        <span class="button-icon">↶</span>
+        With Undo action
+      </button>
+
+      <button type="button" (click)="persistent()">
+        Persistent toast
+      </button>
+
+      <button type="button" (click)="burst()">
+        Burst of 8
+      </button>
+
+      <button type="button" (click)="duplicate()">
+        Duplicate toast
+      </button>
+
+      <button type="button" class="danger-outline" (click)="clearAll()">
+        Clear all
+      </button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading">
+      <span class="section-number">02</span>
+
+      <div>
+        <h2>Per-toast options</h2>
+        <p>
+          Customize the message, duration, position and appearance of
+          individual notifications.
+        </p>
+      </div>
+    </div>
+
+    <div class="form">
+      <label>
+        Toast title
+        <input type="text" [value]="title()" (input)="title.set(value($event))" placeholder="Notification title" />
+      </label>
+
+      <label>
+        Toast message
+        <input type="text" [value]="message()" (input)="message.set(value($event))"
+          placeholder="Your message goes here..." />
+      </label>
+
+      <label>
+        Duration (ms)
+        <input type="number" min="0" step="500" [value]="duration()" (input)="duration.set(+value($event))" />
+        <span class="field-hint">Set to 0 to keep the toast visible.</span>
+      </label>
+
+      <label>
+        Position
+        <select [value]="position()" (change)="position.set(asPosition(value($event)))">
+          @for (p of positions; track p) {
+          <option [value]="p">{{ p }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="toggle-grid">
+      <label class="check">
+        <input type="checkbox" [checked]="showClose()" (change)="showClose.set(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Close button</strong>
+          <small>Let users dismiss a toast manually.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" [checked]="progressBar()" (change)="progressBar.set(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Progress bar</strong>
+          <small>Display the remaining toast duration.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" [checked]="pauseOnHover()" (change)="pauseOnHover.set(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Pause on hover</strong>
+          <small>Pause the timeout while hovering.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" [checked]="showIcon()" (change)="showIcon.set(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Show icon</strong>
+          <small>Display the notification type icon.</small>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading">
+      <span class="section-number">03</span>
+
+      <div>
+        <h2>Global settings</h2>
+        <p>
+          Configure the default toaster appearance and behavior.
+        </p>
+      </div>
+    </div>
+
+    <div class="form">
+      <label>
+        Theme
+        <select [value]="toaster.settings().theme" (change)="setTheme(asTheme(value($event)))">
+          @for (t of themes; track t) {
+          <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Animation
+        <select [value]="toaster.settings().animation" (change)="setAnimation(asAnimation(value($event)))">
+          @for (a of animations; track a) {
+          <option [value]="a">{{ a }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Maximum visible toasts
+        <input type="number" min="0" [value]="toaster.settings().max" (input)="setMax(+value($event))" />
+        <span class="field-hint">Set to 0 for unlimited toasts.</span>
+      </label>
+    </div>
+
+    <div class="toggle-grid">
+      <label class="check">
+        <input type="checkbox" [checked]="toaster.settings().queue" (change)="setQueue(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Queue extra toasts</strong>
+          <small>Queue notifications beyond the visible limit.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" [checked]="toaster.settings().newestOnTop" (change)="setNewestOnTop(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Newest on top</strong>
+          <small>Show the latest notifications first.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" [checked]="toaster.settings().rtl" (change)="setRtl(checked($event))" />
+        <span class="toggle-copy">
+          <strong>Right-to-left layout</strong>
+          <small>Test right-to-left notification layouts.</small>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading">
+      <span class="section-number">04</span>
+
+      <div>
+        <h2>Activity log</h2>
+        <p>
+          Review your recent interactions with the demo.
+        </p>
+      </div>
+    </div>
+
+    <ul class="log">
+      @for (line of log(); track $index) {
+      <li>
+        <span class="log-marker"></span>
+        <span>{{ line }}</span>
+      </li>
+      } @empty {
+      <li class="empty-log">
+        No activity yet. Select a toast type to get started.
+      </li>
+      }
+    </ul>
+  </section>
+
+  <footer class="site-footer">
+    <p class="footer-brand">
+      Part of
+      <a href="https://github.com/serotask" target="_blank" rel="noopener noreferrer">SeroTask</a>
+    </p>
+
+    <nav class="footer-links" aria-label="Project links">
+      <a href="https://github.com/serotask/serotask-angular-toaster" target="_blank" rel="noopener noreferrer">
+        GitHub Repository
+      </a>
+
+      <span aria-hidden="true">·</span>
+
+      <a href="https://www.npmjs.com/package/@serotask/angular-toaster" target="_blank" rel="noopener noreferrer">
+        npm Package
+      </a>
+    </nav>
+
+    <p class="footer-author">
+      Created and maintained by
+      <a href="https://satendra2rajput.com/" target="_blank" rel="noopener noreferrer">
+        Satendra Rajput
+      </a>
+    </p>
+  </footer>
+</main>

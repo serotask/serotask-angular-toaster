@@ -1,0 +1,314 @@
+:host {
+  display: block;
+  pointer-events: auto;
+}
+
+/* =========================================================
+   BASE
+   Colours come from the container (<st-toaster>), see README "Theming".
+========================================================= */
+
+.st-toaster-item {
+  --st-accent: var(--st-toaster-info, #2563eb);
+
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  width: var(--st-toaster-width, 360px);
+  max-width: 100%;
+
+  padding: 16px;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+  border-inline-start: 4px solid var(--st-accent);
+
+  color: var(--_text, #1f2937);
+  background: color-mix(in srgb, var(--st-accent) 10%, var(--_surface, #fff));
+  box-shadow: var(--_shadow, 0 10px 30px rgba(0, 0, 0, 0.12));
+
+  animation-duration: 0.28s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+
+  &--success {
+    --st-accent: var(--st-toaster-success, #16a34a);
+  }
+
+  &--error {
+    --st-accent: var(--st-toaster-error, #dc2626);
+  }
+
+  &--warning {
+    --st-accent: var(--st-toaster-warning, #ea580c);
+  }
+
+  &--info {
+    --st-accent: var(--st-toaster-info, #2563eb);
+  }
+}
+
+/* =========================================================
+   ENTRANCE ANIMATIONS
+========================================================= */
+
+.st-toaster-item[data-position$='-left'] {
+  --st-enter-x: -32px;
+}
+
+.st-toaster-item[data-position$='-right'] {
+  --st-enter-x: 32px;
+}
+
+.st-toaster-item[data-position='top-center'] {
+  --st-enter-y: -24px;
+}
+
+.st-toaster-item[data-position='bottom-center'] {
+  --st-enter-y: 24px;
+}
+
+.st-toaster-item--anim-fade {
+  animation-name: st-toaster-fade;
+}
+
+.st-toaster-item--anim-slide {
+  animation-name: st-toaster-slide;
+}
+
+.st-toaster-item--anim-scale {
+  animation-name: st-toaster-scale;
+}
+
+.st-toaster-item--anim-bounce {
+  animation-name: st-toaster-bounce;
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes st-toaster-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes st-toaster-slide {
+  from {
+    opacity: 0;
+    transform: translate(var(--st-enter-x, 0), var(--st-enter-y, 0));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes st-toaster-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes st-toaster-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.st-toaster-item__icon {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  border-radius: 50%;
+
+  color: #fff;
+  background: var(--st-accent);
+
+  &--custom {
+    background: transparent;
+  }
+
+  img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.st-toaster-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.st-toaster-item__title {
+  margin-bottom: 4px;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+
+  color: var(--st-accent);
+}
+
+.st-toaster-item__message {
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: var(--_muted, #4b5563);
+
+  overflow-wrap: anywhere;
+}
+
+.st-toaster-item__action {
+  margin-top: 8px;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: var(--st-accent);
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.st-toaster-item__close {
+  flex-shrink: 0;
+
+  align-self: flex-start;
+
+  width: 24px;
+  height: 24px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--_muted, #6b7280);
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: color-mix(in srgb, var(--st-accent) 15%, transparent);
+    color: var(--st-accent);
+  }
+}
+
+.st-toaster-item__action:focus-visible,
+.st-toaster-item__close:focus-visible {
+  outline: 2px solid var(--st-accent);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   PROGRESS BAR
+   Length comes from --st-toaster-duration (set per toast in the template).
+========================================================= */
+
+.st-toaster-item__progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+
+  height: 3px;
+
+  overflow: hidden;
+
+  background: color-mix(in srgb, var(--st-accent) 20%, transparent);
+
+  &::after {
+    content: '';
+
+    display: block;
+
+    height: 100%;
+
+    background: var(--st-accent);
+
+    transform-origin: left;
+
+    animation: st-toaster-progress var(--st-toaster-duration, 4000ms) linear forwards;
+  }
+
+  &--paused::after {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes st-toaster-progress {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE + REDUCED MOTION
+========================================================= */
+
+@media (max-width: 600px) {
+  .st-toaster-item {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-toaster-item {
+    animation: none;
+  }
+}
